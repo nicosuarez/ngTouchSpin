@@ -39,7 +39,7 @@ angular.module('jkuri.touchspin', [])
 				oldval = scope.val;
 				var value = parseFloat(parseFloat(Number(scope.val)) - parseFloat(scope.step)).toFixed(scope.decimals);
 
-				if (value < scope.min) {
+				if (parseFloat(value) < parseFloat(scope.min)) {
 					value = parseFloat(scope.min).toFixed(scope.decimals);
 					scope.val = value;
 					ngModel.$setViewValue(value);
@@ -54,7 +54,7 @@ angular.module('jkuri.touchspin', [])
 				oldval = scope.val;
 				var value = parseFloat(parseFloat(Number(scope.val)) + parseFloat(scope.step)).toFixed(scope.decimals);
 
-				if (value > scope.max) return;
+				if (parseFloat(value) > parseFloat(scope.max)) return;
 
 				scope.val = value;
 				ngModel.$setViewValue(value);
@@ -101,6 +101,19 @@ angular.module('jkuri.touchspin', [])
 
 			scope.checkValue = function () {
 				var val;
+				
+				// retains value into boundary values
+				if (scope.min) {
+					if (parseFloat(scope.val) < parseFloat(scope.min)) {
+						scope.val = scope.min;
+					}
+				}
+
+				if (scope.max) {
+					if (parseFloat(scope.val) > parseFloat(scope.max)) {
+						scope.val = scope.max;
+					}
+				}
 
 				if (scope.val !== '' && !scope.val.match(/^-?(?:\d+|\d*\.\d+)$/i)) {
 					val = oldval !== '' ? parseFloat(oldval).toFixed(scope.decimals) : parseFloat(scope.min).toFixed(scope.decimals);
